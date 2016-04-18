@@ -27,28 +27,33 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     Context mContext;
     Double duration;
     Geo geo1;
-//constructor is used to get the context.
+    CalAlertTime objCalAlertTime;
+    //constructor is used to get the context.
     public GeoTask(Context mContext) {
         this.mContext = mContext;
-        geo1= (Geo) mContext;
+        Log.d("mContext", String.valueOf(mContext));
+//        geo1= (Geo) mContext;
+        Log.d("mContext_geo1", String.valueOf(geo1));
     }
-//This function is executed before before "doInBackground(String...params)" is executed to dispaly the progress dialog
+    //This function is executed before before "doInBackground(String...params)" is executed to dispaly the progress dialog
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pd=new ProgressDialog(mContext);
-        pd.setMessage("Loading");
-        pd.setCancelable(false);
-        pd.show();
+//        pd=new ProgressDialog(mContext);
+//        pd.setMessage("Loading");
+//        pd.setCancelable(false);
+//        pd.show();
     }
-//This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
+    //This function is executed after the execution of "doInBackground(String...params)" to dismiss the dispalyed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
     @Override
     protected void onPostExecute(String aDouble) {
         super.onPostExecute(aDouble);
         if(aDouble!=null)
         {
-         geo1.setDouble(aDouble);
-            pd.dismiss();
+            String res[]=aDouble.split(",");
+            Double min=Double.parseDouble(res[0])/60;
+            int dist=Integer.parseInt(res[1])/1000;
+//            pd.dismiss();
         }
         else
             Toast.makeText(mContext, "Error4!Please Try Again wiht proper values", Toast.LENGTH_SHORT).show();
@@ -85,7 +90,6 @@ public class GeoTask extends AsyncTask<String, Void, String> {
                 Log.d("JSON","object_elements:"+object_elements);
                 JSONObject object_duration=object_elements.getJSONObject("duration");
                 JSONObject object_distance=object_elements.getJSONObject("distance");
-
                 Log.d("JSON","object_duration:"+object_duration);
                 return object_duration.getString("value")+","+object_distance.getString("value");
 

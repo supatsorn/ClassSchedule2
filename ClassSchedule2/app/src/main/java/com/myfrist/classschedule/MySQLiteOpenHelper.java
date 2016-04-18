@@ -17,18 +17,18 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public SQLiteDatabase database;
 
     private com.myfrist.classschedule.MySQLiteOpenHelper dbHelper;
-    private static final String databaseName = "mint26.sqlite";
+    private static final String databaseName = "mint27.sqlite";
     private  static  final  int databaseVertion = 1;
     Context myContext;
 
     private static  final String TableSemester = "CREATE TABLE Semester" +
             "(semester_id INTEGER PRIMARY KEY AUTOINCREMENT,semester_num TEXT,year TEXT,start_date TEXT,end_date TEXT);";
     private static final String TableClassSchedule = "CREATE TABLE Class_schedule"+
-            "(class_id INTEGER PRIMARY KEY AUTOINCREMENT,sbj_name TEXT,sbj_code TEXT,day TEXT,start_time TEXT,location TEXT,notice TEXT,detail TEXT,location_id INTEGER);";
+            "(class_id INTEGER PRIMARY KEY AUTOINCREMENT,sbj_name TEXT,sbj_code TEXT,day TEXT,start_time TEXT,location INTEGER,notice TEXT,detail TEXT,location_id INTEGER);";
 //    private static final String TableLocation = "CREATE TABLE Location"+
 //            "(location_id INTEGER PRIMARY KEY AUTOINCREMENT,location_name TEXT,lat INTEGER,lng INTEGER);";
 
-
+  //  https://maps.googleapis.com/maps/api/distancematrix/json?origins=18.8016565,98.9547273&destinations=18.8011958,98.9532585&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8
     public static final String Location_TABLE = "Location";
     public static final String LOCATION_ID= "location_id";
     public static final String LOCATION_NAME = "location_name";
@@ -50,7 +50,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE "+ Location_TABLE
                 +" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + LOCATION_NAME + " TEXT, " + LNG + " TEXT, " + LAT + " TEXT );");
-        db.execSQL("INSERT INTO Location (location_name, lng, lat )VALUES ('SCB1','18.8020107','98.9530148');");
+        db.execSQL("INSERT INTO Location (location_name, lng, lat )VALUES ('SCB1','c');");
         db.execSQL("INSERT INTO Location (location_name,lat,lng) VALUES ('SCB2','18.8016565','98.9547273');");
         db.execSQL("INSERT INTO Location (location_name,lat,lng) VALUES ('SCB3','18.8032285','98.952047');") ;
         db.execSQL( "INSERT INTO Location (location_name,lat,lng) VALUES ('SCB4','18.803145','98.953478');");

@@ -38,7 +38,7 @@ public class Class_Schedule {
         writeSqLiteDatabase = objMySQLiteOpenHelper.getWritableDatabase();
         readSqLiteDatabase = objMySQLiteOpenHelper.getReadableDatabase();
     }   // Constructor
-    public boolean addNewClass_Schedule(String strName, String Code,String Day,String startTime,String Location,String Notice,String Detail){
+    public boolean addNewClass_Schedule(String strName, String Code,String Day,String startTime,int Location,String Notice,String Detail){
         ContentValues objContentValues = new ContentValues();
         objContentValues.put(SBJ_NAME,strName);
         objContentValues.put(SBJ_CODE,Code);

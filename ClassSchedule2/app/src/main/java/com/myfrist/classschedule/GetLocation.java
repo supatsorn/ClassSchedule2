@@ -43,12 +43,12 @@ public class GetLocation extends  Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-//        ArrayList<String> locationList = new ArrayList<String>();
-        txtLat = (TextView) findViewById(R.id.textview1);
-        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
-//        String strList = location.getLatitude()+","+location.getLongitude();
-//        lat_lng.add(strList);
-//        Log.d("strList", String.valueOf(lat_lng));
+        ArrayList<String> locationList = new ArrayList<String>();
+//        txtLat = (TextView) findViewById(R.id.textview1);
+//        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+        String strList = location.getLatitude()+","+location.getLongitude();
+        lat_lng.add(strList);
+        Log.d("strList", String.valueOf(lat_lng));
 
 
     }

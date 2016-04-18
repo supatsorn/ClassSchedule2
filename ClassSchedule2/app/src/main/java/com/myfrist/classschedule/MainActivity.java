@@ -53,10 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private int mCount_i,tuCount_i,wCount_i,thCount_i,fCount_i,saCount_i,suCount_i;
     public ArrayList<String> start_time_mon,start_time_tue,start_time_wed,start_time_thu,start_time_fri,start_time_sat,start_time_sun;
     public ArrayList<String> loca_mon,loca_tue,loca_wed,loca_thu,loca_fri,loca_sat,loca_sun;
+    public ArrayList<String> noti_mon,noti_tue,noti_wed,noti_thu,noti_fri,noti_sat,noti_sun;
     ArrayList<String> myList_sem;
     ArrayList<String> myList_class;
     public String time_appointments;
     private String strGetLocation;
+    public String lat,lng,lat_lng;
 
 
 
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         myList_sem= getAllsemList();
         myList_class= getAllclassList();
         start_time_mon = getAllMonList();
+        Log.i("start_time_mon", String.valueOf(start_time_mon));
         start_time_tue = getAllTueList();
         start_time_wed = getAllWList();
         start_time_thu = getAllThuList();
@@ -186,6 +189,24 @@ public class MainActivity extends AppCompatActivity {
         start_time_sun = getAllSunList();
         Log.i("myList_class", String.valueOf(myList_class));
         Log.i("start_time_sunkk", String.valueOf(start_time_sun));
+        //get lat long
+        loca_mon = getAllLocalMonList();
+        loca_tue = getAllLocalTueList();
+        loca_wed = getAllLocalWList();
+        loca_thu = getAllLocalThuList();
+        loca_fri = getAllLocalFriList();
+        loca_sat = getAllLocalSatList();
+        loca_sun = getAllLocalSunList();
+
+        //get notice
+        noti_mon = getAllNotiMonList();
+        noti_tue = getAllNotiTueList();
+        noti_wed = getAllNotiWList();
+        noti_thu = getAllNotiThuList();
+        noti_fri = getAllNotiFriList();
+        noti_sat = getAllNotiSatList();
+        noti_sun = getAllNotiSunList();
+
         compareDates();
 
         //get lat-lng location
@@ -319,10 +340,16 @@ public class MainActivity extends AppCompatActivity {
             //yada yada
 //            String today = convertDateTimeFormat();
 //            Log.i("current_time today", today);
-                if(today.toString()=="Mon") {
-                    for(int i=0;i<=mCount_i;i++){
+                if((today.equals("Mon"))||(today.equals("จ."))) {
+                    for(int i=0;i<mCount_i;i++){
 
-//                    time_appointments =date2+start_time_mon.get(i);
+                        String time_appointments = date2 + " " + start_time_mon.get(i);
+                        String lat_long = loca_mon.get(i);
+                        String time_notice = noti_mon.get(i);
+                        Log.i("lat_long", lat_long);
+                        Log.i("time_appointments", String.valueOf(time_appointments));
+                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        x.start();
 
                     }
                     Log.i("Pancake ", "Monday");
@@ -330,9 +357,11 @@ public class MainActivity extends AppCompatActivity {
 
                     for( int i=0;i<tuCount_i;i++) {
                         String time_appointments = date2 + " " + start_time_tue.get(i);
-
+                        String lat_long = loca_tue.get(i);
+                        String time_notice = noti_tue.get(i);
+                        Log.i("lat_long", lat_long);
                         Log.i("time_appointments", String.valueOf(time_appointments));
-                        Thread x = new Thread(new CalAlertTime(time_appointments));
+                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
                         x.start();
                     }
 
@@ -340,9 +369,9 @@ public class MainActivity extends AppCompatActivity {
                 }else if ((today.equals("Wed"))||(today.equals("พ."))){
                     for( int i=0;i<wCount_i;i++) {
                         String time_appointments = date2 + " " + start_time_wed.get(i);
-
-                        Log.i("time_appointments", String.valueOf(time_appointments));
-                        Thread x = new Thread(new CalAlertTime(time_appointments));
+                        String lat_long = loca_wed.get(i);
+                        String time_notice = noti_wed.get(i);
+                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
                         x.start();
                     }
                     Log.i("Pancake ", "Wednesday");
@@ -623,7 +652,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> getAllSatList() {
         data = db.getWritableDatabase();
         ArrayList<String> todoList = new ArrayList<String>();
-        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Mon';", null);
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Sat';", null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -669,7 +698,317 @@ public class MainActivity extends AppCompatActivity {
         return todoList;
     }
 
-    public ArrayList<String> getLocaMonList() {
+//    public ArrayList<String> getLocaMonList() {
+//        data = db.getWritableDatabase();
+//        ArrayList<String> todoList = new ArrayList<String>();
+//        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id ", null);
+//        cursor.moveToFirst();
+//
+//        while (!cursor.isAfterLast()) {
+//
+//            // String  Monny = cursor.getString(3);
+//            String  strM = cursor.getString(4);
+//            // end_date =(cursor.getString(4));
+//            // Log.i(" mint start,end", start_date);
+//            // Log.i("Monny ", Monny);
+//            // Log.i("Monn2 ", Monny2);
+//            todoList.add(strM);
+//            Log.i("todoList ", String.valueOf(todoList));
+//            suCount++;
+//            cursor.moveToNext();
+//        }
+//        suCount_i=suCount;
+//        //    Log.i("mCount ", String.valueOf(mCount));
+//        cursor.close();
+//        return todoList;
+//    }
+
+    //get location lat long
+    public ArrayList<String> getAllLocalMonList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Mon';", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+
+             String  strM1 = cursor.getString(12);
+            String  strM2 = cursor.getString(11);
+            String strLatLng = strM1+","+strM2;
+
+             Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return todoList;
+    }
+    public ArrayList<String> getAllLocalTueList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Tue';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        tuCount_i=tuCount;
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllLocalWList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Wed';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllLocalThuList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Mon';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllLocalFriList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Fri';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllLocalSatList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Sat';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllLocalSunList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Sun';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
+            String strLatLng = strM1+","+strM2;
+
+            Log.i("strLatLng ", strLatLng);
+            todoList.add(strLatLng);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiMonList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Mon';", null);
+        cursor.moveToFirst();
+        int i=0;
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(i);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+
+            cursor.moveToNext();
+        }
+
+        Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+    public ArrayList<String> getAllNotiTueList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Tue';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(4);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+
+            cursor.moveToNext();
+        }
+
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiWList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Wed';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(4);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+
+            cursor.moveToNext();
+        }
+
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiThuList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Mon';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(4);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+
+            cursor.moveToNext();
+        }
+
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiFriList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Fri';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(4);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiSatList() {
+        data = db.getWritableDatabase();
+        ArrayList<String> todoList = new ArrayList<String>();
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Sat';", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+
+            // String  Monny = cursor.getString(3);
+            String  strM = cursor.getString(4);
+            // end_date =(cursor.getString(4));
+            // Log.i(" mint start,end", start_date);
+            // Log.i("Monny ", Monny);
+            // Log.i("Monn2 ", Monny2);
+            todoList.add(strM);
+            cursor.moveToNext();
+        }
+        //    Log.i("mCount ", String.valueOf(mCount));
+        cursor.close();
+        return todoList;
+    }
+
+    public ArrayList<String> getAllNotiSunList() {
         data = db.getWritableDatabase();
         ArrayList<String> todoList = new ArrayList<String>();
         Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Sun';", null);
@@ -685,10 +1024,8 @@ public class MainActivity extends AppCompatActivity {
             // Log.i("Monn2 ", Monny2);
             todoList.add(strM);
             Log.i("todoList ", String.valueOf(todoList));
-            suCount++;
             cursor.moveToNext();
         }
-        suCount_i=suCount;
         //    Log.i("mCount ", String.valueOf(mCount));
         cursor.close();
         return todoList;

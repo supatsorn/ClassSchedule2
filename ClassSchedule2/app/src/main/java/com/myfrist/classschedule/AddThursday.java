@@ -30,6 +30,7 @@ public class AddThursday extends AppCompatActivity {
     private Location objLocation;
     static final int DILOG_ID = 0;
     int hour_x,minute_x;
+    int local_l;
     String settime,Thu= "Thu",location;
     private Spinner d_location,d_notice;
     private String[] strLocation,strNotice;
@@ -70,6 +71,32 @@ public class AddThursday extends AppCompatActivity {
                                        int i, long l) {
                 strLocationChooed = strLocation[i];
                 Log.i("DATA", strLocationChooed);
+                if(l==0){
+                    local_l = 1;
+                }else if (l==1){
+                    local_l = 2;
+                }else if(l==2){
+                    local_l=3;
+                }else if (l==3){
+                    local_l=4;
+                }else if (l==4){
+                    local_l=5;
+                }else if (l==5){
+                    local_l=6;
+                }else if (l==6){
+                    local_l=7;
+                }else if (l==7){
+                    local_l=8;
+                }else if (l==8){
+                    local_l=9;
+                }else if (l==9){
+                    local_l=10;
+                }else if (l==10){
+                    local_l=11;
+                }else if (l==11){
+                    local_l=12;
+                }else
+                    local_l=0;
             }
 
             @Override
@@ -111,7 +138,7 @@ public class AddThursday extends AppCompatActivity {
 
 
                         boolean isInserted = objClass_Schedul.addNewClass_Schedule(sbj_name.getText().toString(),
-                                sbj_num.getText().toString(),Thu.toString(),settime.toString(),strLocationChooed.toString()
+                                sbj_num.getText().toString(),Thu.toString(),settime.toString(),local_l
                                 ,strNoticeChooed.toString(),detail.getText().toString());
                         if (isInserted = true)
                             Toast.makeText(AddThursday.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
