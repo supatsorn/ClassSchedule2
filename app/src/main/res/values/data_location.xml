@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="data_location">
+        <item>SCB1</item>
+        <item>SCB2</item>
+        <item>SCB3</item>
+        <item>SCB4</item>
+        <item>MB</item>
+        <item>STB</item>
+        <item>PB</item>
+        <item>IMB</item>
+        <item>CB</item>
+        <item>BB</item>
+        <item>GB</item>
+        <item>CSB</item>
+    </string-array>
+</resources>
