@@ -85,6 +85,7 @@ public class Alarm extends Activity {
         final int _id = (int) System.currentTimeMillis();
 
         Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

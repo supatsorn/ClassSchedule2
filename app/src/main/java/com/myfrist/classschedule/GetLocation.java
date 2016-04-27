@@ -26,15 +26,22 @@ public class GetLocation extends  Activity implements LocationListener {
     public ArrayList<String> lat_lng;
     String lat;
     String provider;
-    protected String latitude,longitude;
+    protected double latitude;
+    protected double longitude;
     protected boolean gps_enabled,network_enabled;
+   
+    boolean isGPSEnabled = false;
+    boolean isNetworkEnabled = false;
+    boolean canGetLocation = false;
+
+    Location location; // location
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_location);
 
         txtLat = (TextView) findViewById(R.id.textview1);
-
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
@@ -43,12 +50,12 @@ public class GetLocation extends  Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        ArrayList<String> locationList = new ArrayList<String>();
-//        txtLat = (TextView) findViewById(R.id.textview1);
-//        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
-        String strList = location.getLatitude()+","+location.getLongitude();
-        lat_lng.add(strList);
-        Log.d("strList", String.valueOf(lat_lng));
+//        ArrayList<String> locationList = new ArrayList<String>();
+        txtLat = (TextView) findViewById(R.id.textview1);
+        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+//        String strList = location.getLatitude()+","+location.getLongitude();
+//        lat_lng.add(strList);
+//        Log.d("strList", String.valueOf(lat_lng));
 
 
     }

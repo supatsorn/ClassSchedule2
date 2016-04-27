@@ -47,7 +47,7 @@ public class ShowEvent extends Activity implements OnClickListener {
 	 	@Override
 		public void onClick(View v) {
 	 		if(v.getId() == R.id.btnStop){
-	 			Alarm.listValue.remove(0);
+//	 			Alarm.listValue.remove(0);
 	 			this.finish();
 	 		}
 		}

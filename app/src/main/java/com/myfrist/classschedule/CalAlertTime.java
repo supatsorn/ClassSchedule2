@@ -71,11 +71,13 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     Button buttonstartSetDialog;
     private ListView listAlarm;
     public static ArrayList<String> listValue;
-    Context mContext;
     TimePickerDialog timePickerDialog;
-
+    private AlarmManager mAlarmManager;
+    private PendingIntent alarmIntent;
+    private GPSTracker gps;
     final static int RQS_1 = 1;
 
+    Context mContext;
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -97,27 +99,52 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
 //
 //
 //    }
-@Override
-public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+//@Override
+////public void onCreate(Bundle savedInstanceState) {
+////    super.onCreate(savedInstanceState);
+////    setContentView(R.layout.test_alam);
+////    Calendar nnnn = Calendar.getInstance();
+////    nnnn.getTime();
+////    setAlarm(nnnn);
+//
+////                    final int _id = (int) System.currentTimeMillis();
+////
+////                    Intent intent = new Intent(getBaseContext(), ShowEvent.class);
+////                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
+////                    AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+////                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
+//
+//}
+    public CalAlertTime(Context mContext,String time_appointments,String lat_long,String time_notice,GPSTracker gpsTracker) throws ParseException {
 
-}
-    public CalAlertTime(String time_appointments,String lat_long,String time_notice) throws ParseException {
-
+        this.mContext = mContext;
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
         Log.d("URL", url);
         this.time_notice = time_notice;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time_appointments2 = dateFormat.parse(time_appointments);
         this.time_appointments=time_appointments2;
+        this.gps = gpsTracker;
+        gps.getLatitude();
+        gps.getLongitude();
+        Log.i("Latitude,","Longitude"+gps.getLatitude()+gps.getLongitude());
 
-        String currentDate1 = getDateTime();
-        Date currentDate = dateFormat.parse(currentDate1);
-        this.currentDate=currentDate;
+//        String currentDate1 = getDateTime();
+//        Date currentDate = dateFormat.parse(currentDate1);
+//        this.currentDate=currentDate;
         GeoTask geoTask = new GeoTask(CalAlertTime.this,time_appointments,time_notice);
         geoTask.delegate = this;
         geoTask.execute(url);
 
+
+//        Calendar nnnn = Calendar.getInstance();
+//                    nnnn.getTime();
+//                    final int _id = (int) System.currentTimeMillis();
+//
+//                    Intent intent = new Intent(context, AlarmReceiver.class);
+//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, _id, intent, 0);
+//                    AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
 
 //        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + lat_long + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
 //        Log.d("url", url);
@@ -162,17 +189,51 @@ public void onCreate(Bundle savedInstanceState) {
     }
 
     private PendingIntent pendingIntent;
+
+
     public void run() {
 
        while (true) {
             try {
+
                 Thread.sleep(10000);
                 Date time_cal = calAlert(time_appointments, time_notice, time_travel);
-                Log.i("WoW_time_cal", String.valueOf(time_cal));
+                String currentDate1 = getDateTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date currentDate = dateFormat.parse(currentDate1);
+                this.currentDate=currentDate;
+                Log.i("WoW_time_cal","Caltime = "+ String.valueOf(time_cal)+" current = "+String.valueOf(currentDate));
                 if (time_cal.getTime() <= currentDate.getTime()) {
+
+//                    Calendar nnnn = Calendar.getInstance();
+//
+//                    nnnn.getTime();
+                    Calendar nnnn = Calendar.getInstance();
+                    nnnn.getTime();
+                    final int _id = (int) System.currentTimeMillis();
+
+                    Intent intent = new Intent(mContext, AlarmReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, _id, intent, 0);
+                    AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
+
+//                    setAlarm(nnnn);
+//                    Intent i = new Intent();
+//                    i.setClass(this, AlarmReceiver.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(i);
+//                    Intent intent = new Intent(this, AlarmReceiver.class);
+//                    startActivity(intent);
+//                    mintMinny();
+//                    Intent intent = new Intent(this, ShowEvent.class);
+//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,  0, intent, 0);
+//                    mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//
+//                    // Cancel any existing service(s)
+//                    mAlarmManager.cancel(pendingIntent);
 //                    Intent alarmIntent = new Intent(CalAlertTime.this, AlarmReceiver.class);
 //                    pendingIntent = PendingIntent.getBroadcast(CalAlertTime.this, 0, alarmIntent, 0);
-//                    startActivity(new Intent(CalAlertTime.this, ShowEvent.class));
+//                    startActivity(new Intent(CalAlertTime.this, Alarm.class));
                  //getAlarm();
 //                    Calendar nnnn = Calendar.getInstance();
 //                    nnnn.getTime();
@@ -197,12 +258,27 @@ public void onCreate(Bundle savedInstanceState) {
 ////                System.out.println("countdown:done");
 ////
             } catch (InterruptedException e) {
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        }
+       }
 
     }
 
+   public void mintMinny(){
+//       Intent intent = new Intent(CalAlertTime.this, Alarm.class);
+//       startActivity(intent);
+//       Calendar nnnn = Calendar.getInstance();
+//       nnnn.getTime();
+//       final int _id = (int) System.currentTimeMillis();
+//
+//       Intent intent = new Intent(this, AlarmReceiver.class);
+//       PendingIntent pendingIntent = PendingIntent.getBroadcast(this, _id, intent, PendingIntent.FLAG_ONE_SHOT);
+//       AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//       alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
 
+
+   }
     public Date calAlert(Date time_appointments_, String time_notice_, String time_travel_) {
         int time_notice1 = Integer.parseInt(time_notice_);
         int time_notice2 = time_notice1 * 60 * 1000;
@@ -257,36 +333,36 @@ public void onCreate(Bundle savedInstanceState) {
 //
         return time_cal;
     }
-//    public Alarm getAlarm(){
-//
-//
-//
-//        Calendar nnnn = Calendar.getInstance();
-//        nnnn.getTime();
-//        Log.i("Calendar nnnn", String.valueOf(nnnn));
-//        setAlarm(nnnn);
-//        return null;
-//    }
-//    public void setAlarm(Calendar targetCal) {
-//        Log.i("targetCal.getTime() = ", targetCal.getTime().toString());
-////        listValue.add(targetCal.getTime() + "");
-//
-////        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,listValue);
-////        listAlarm.setAdapter(adapter);
-////        Log.i("listValue", String.valueOf(listValue));
-//        final int _id = (int) System.currentTimeMillis();
-//
-//        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
-//        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
-//
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-////        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValue);
-////        listAlarm.setAdapter(adapter);
-//    }
+    public Alarm getAlarm(){
+
+
+
+        Calendar nnnn = Calendar.getInstance();
+        nnnn.getTime();
+        Log.i("Calendar nnnn", String.valueOf(nnnn));
+        setAlarm(nnnn);
+        return null;
+    }
+    public void setAlarm(Calendar targetCal) {
+        Log.i("targetCal.getTime() = ", targetCal.getTime().toString());
+//        listValue.add(targetCal.getTime() + "");
+
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,listValue);
+//        listAlarm.setAdapter(adapter);
+//        Log.i("listValue", String.valueOf(listValue));
+        final int _id = (int) System.currentTimeMillis();
+
+        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValue);
+//        listAlarm.setAdapter(adapter);
+    }
     }

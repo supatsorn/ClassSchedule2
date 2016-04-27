@@ -1,6 +1,8 @@
 package com.myfrist.classschedule;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private String strGetLocation;
     public String lat,lng,lat_lng;
     public Thread x;
+    public GPSTracker gpsTracker;
 
 
 
@@ -67,6 +70,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        gpsTracker = new GPSTracker(this);
+        if (gpsTracker.getIsGPSTrackingEnabled()) {
+
+            Double Lat = gpsTracker.latitude;
+            Double Lng = gpsTracker.longitude;
+            Log.i("Lat-Lng_Hooooooooooo___Lat", String.valueOf(Lat));
+            Log.i("Lat-Lng_Hooooooooooo___Lng", String.valueOf(Lng));
+        }else {
+            Log.i("Lat-Lng_Hooooooooooo", "Can not show lat long");
+
+//           gpsTracker.showSettingsAlert();
+        }
 
         //monday
         monday = (Button) findViewById(R.id.mon);
@@ -147,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Click", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, Alarm.class);
+                Intent intent = new Intent(MainActivity.this, VarnaLabGeoLocations.class);
                 intent.putExtra("name", "this is Main2");
                 startActivity(intent);
             }
@@ -190,11 +205,16 @@ public class MainActivity extends AppCompatActivity {
         noti_sat = getAllNotiSatList();
         noti_sun = getAllNotiSunList();
 
-        try {
-            compareDates();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //get start_date end_date
+        if (start_date==null){
+            Log.i("Not found ","Start date"+" End date");
+        }else
+            openDialog();
+//        try {
+//            compareDates();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -260,14 +280,14 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("current_time", current_time);
         String today = convertDateTimeFormat();
         Log.i("current_time today", today);
-       String start_date2="2016-04-09 08:00:00";
-        String end_date2="2016-05-12 08:00:00";
-        dateCompareOne = parseDate(start_date2);
-        dateCompareTwo = parseDate(end_date2);
+//       String start_date2="2016-04-09 08:00:00";
+//        String end_date2="2016-05-12 08:00:00";
+        dateCompareOne = parseDate(start_date);
+        dateCompareTwo = parseDate(end_date);
         Log.i("cent_time start", String.valueOf(dateCompareOne));
         Log.i("current_time end", String.valueOf(dateCompareTwo));
-        ArrayList<String> days= new ArrayList<>();
-                        days.add("Mon");
+//        ArrayList<String> days= new ArrayList<>();
+//                        days.add("Mon");
 
         if ( dateCompareOne.before( date ) && dateCompareTwo.after(date)) {
             //yada yada
@@ -281,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
                         String time_notice = noti_mon.get(i);
                         Log.i("lat_long", lat_long);
                         Log.i("time_appointments", String.valueOf(time_appointments));
-                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        Thread x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
 
                     }
@@ -294,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                         String time_notice = noti_tue.get(i);
                         Log.i("lat_long", lat_long);
                         Log.i("time_appointments", String.valueOf(time_appointments));
-                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        Thread x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
                     }
 
@@ -305,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                         String lat_long = loca_wed.get(i);
                         String time_notice = noti_wed.get(i);
                         Log.i("time_notice ", time_notice);
-                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        Thread x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
                     }
                     Log.i("Pancake ", "Wednesday");
@@ -315,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
                         String lat_long = loca_thu.get(i);
                         String time_notice = noti_thu.get(i);
                         Log.i("time_notice ", time_notice);
-                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        Thread x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
                     }
                     Log.i("Pancake ", "Thursday");
@@ -325,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                     String lat_long = loca_fri.get(i);
                     String time_notice = noti_fri.get(i);
                     Log.i("time_notice ", time_notice);
-                     x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                     x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                     x.start();
                 }
                     Log.i("Pancake ", "Friday");
@@ -335,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                         String lat_long = loca_sat.get(i);
                         String time_notice = noti_sat.get(i);
                         Log.i("time_notice ", time_notice);
-                        x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
                     }
                     Log.i("Pancake ", "Saturday");
@@ -346,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                         String lat_long = loca_sun.get(i);
                         String time_notice = noti_sun.get(i);
                         Log.i("time_notice ", time_notice);
-                        Thread x = new Thread(new CalAlertTime(time_appointments,lat_long,time_notice));
+                        Thread x = new Thread(new CalAlertTime(getApplicationContext(),time_appointments,lat_long,time_notice, gpsTracker));
                         x.start();
                     }
 
@@ -384,7 +404,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+   //Alert dialog setting
+   public void openDialog(){
+       AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+       alertDialogBuilder.setMessage("Warning!,You must set the semester");
 
+       alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface arg0, int arg1) {
+               Intent intent = new Intent(MainActivity.this, Setting.class);
+               intent.putExtra("name", "this is Main2");
+               startActivity(intent);
+              // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+           }
+       });
+
+       alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+               finish();
+           }
+       });
+
+       AlertDialog alertDialog = alertDialogBuilder.create();
+       alertDialog.show();
+   }
 
     //ปุ่มตั้งค่าด้านบน
     @Override

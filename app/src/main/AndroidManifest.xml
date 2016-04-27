@@ -10,15 +10,17 @@
     <!-- <uses-permission -->
     <!-- android:name="android.permission.READ_EXTERNAL_STORAGE" -->
     <!-- android:maxSdkVersion="22" /> -->
-
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17"        />
-    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
-    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -139,6 +141,11 @@
         <activity
             android:name=".GetLocation"
             android:label="@string/title_activity_get_location"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".VarnaLabGeoLocations"
+            android:label="@string/title_activity_varna_lab_geo_location"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
