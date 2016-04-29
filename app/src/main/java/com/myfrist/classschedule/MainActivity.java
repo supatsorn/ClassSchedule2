@@ -1,7 +1,10 @@
 package com.myfrist.classschedule;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -207,14 +210,15 @@ public class MainActivity extends AppCompatActivity {
 
         //get start_date end_date
         if (start_date==null){
+            openDialog();
             Log.i("Not found ","Start date"+" End date");
         }else
-            openDialog();
-//        try {
-//            compareDates();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+
+        try {
+             compareDates();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -577,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> getAllThuList() {
         data = db.getWritableDatabase();
         ArrayList<String> todoList = new ArrayList<String>();
-        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Mon';", null);
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Thu';", null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -731,8 +735,6 @@ public class MainActivity extends AppCompatActivity {
             todoList.add(strLatLng);
             cursor.moveToNext();
         }
-        tuCount_i=tuCount;
-        //    Log.i("mCount ", String.valueOf(mCount));
         cursor.close();
         return todoList;
     }
@@ -761,7 +763,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> getAllLocalThuList() {
         data = db.getWritableDatabase();
         ArrayList<String> todoList = new ArrayList<String>();
-        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Mon';", null);
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule INNER JOIN Location ON Class_schedule.location=Location._id where day='Thu';", null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -915,7 +917,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> getAllNotiThuList() {
         data = db.getWritableDatabase();
         ArrayList<String> todoList = new ArrayList<String>();
-        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Mon';", null);
+        Cursor cursor = data.rawQuery("SELECT * from Class_schedule where day='Thu';", null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -1003,4 +1005,25 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
         return todoList;
     }
+
+//    @Override
+//    public void run() {
+//        while (true) {
+//            try {
+//
+//                Thread.sleep(10000);
+//
+//                    Log.i("Happy a new days","________");
+//                    System.out.println("Happy a new days");
+//
+//
+//
+//
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
+
 }

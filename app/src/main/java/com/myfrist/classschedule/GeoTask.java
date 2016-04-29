@@ -31,6 +31,8 @@ import java.util.Locale;
 
 public class GeoTask extends AsyncTask<String, Void, String> {
 
+
+
     public interface AsyncResponse {
         void processFinish(String output);
     }
@@ -48,7 +50,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
     //constructor is used to get the context.
     private ListView listAlarm;
     public static ArrayList<String> listValue;
-    public GeoTask(Context mContext,String time_appointments,String time_notice) {
+    public GeoTask(Context mContext) {
         this.mContext = mContext;
         Log.d("mContext", String.valueOf(mContext));
         this.time_appointments=time_appointments;

@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,12 +61,59 @@ public class Tuesday extends AppCompatActivity {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            String str = "วิชา"+cursor.getString(1) + "  : เวลา" + cursor.getString(4)
-                    +"  : สถานที่"+ cursor.getString(5)  ;
-//            String str = cursor.getString(3);
-//            todoList.add(cursor.getString(1));
-            todoList.add(str);
-            cursor.moveToNext();
+            String local = cursor.getString(5);
+            Log.i("Local is ", local);
+            if(local.equals("1")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB1"+cursor.getString(5)+"  Note! : "+ cursor.getString(7) ;
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("2")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB2"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("3")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB3"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("4")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB4"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("5")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : MB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("6")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : STB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("7")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : PB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("8")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : IMB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("9")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("10")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : BB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }else if(local.equals("11")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : GB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }
+            else if(local.equals("12")){
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CSB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                todoList.add(str);
+                cursor.moveToNext();
+            }
+            String strt = "วิชา : Not Found " + "   เวลา : Not Found ";
         }
         cursor.close();
         return todoList;

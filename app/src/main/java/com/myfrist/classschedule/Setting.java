@@ -91,7 +91,6 @@ public class Setting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Setting.this, MainActivity.class);
-                intent.putExtra("name", "this is Main2");
                 startActivity(intent);
             }
         });
@@ -292,8 +291,11 @@ public class Setting extends AppCompatActivity {
                         Log.i("mint",date_time1+"AND"+date_time2);
                         boolean isInserted = objSemester.addNewSemester(semester_num.getText().toString(),
                                 year.getText().toString(), date_time1.toString(),date_time2.toString());
-                        if (isInserted = true)
+                        if (isInserted = true) {
+                            Intent intent = new Intent(Setting.this, MainActivity.class);
+                            startActivity(intent);
                             Toast.makeText(Setting.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
+                        }
                         else
                             Toast.makeText(Setting.this, "DATA not Inserted ", Toast.LENGTH_LONG).show();
 

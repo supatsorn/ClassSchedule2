@@ -54,7 +54,7 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     private SQLiteDatabase data;
     private MySQLiteOpenHelper db;
     //String time_appointments = "2016-03-19 11:00:00";
-    String time_travel;
+    String time_travel="5.0";
     Date time_alerts;
     Date time_cal;
     MainActivity objmain;
@@ -66,6 +66,7 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     String Output;
     Date time_appointments,currentDate;
     String time_notice;
+    String lat_lng;
     Handler mHandler;
     TimePicker myTimePicker;
     Button buttonstartSetDialog;
@@ -118,43 +119,39 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     public CalAlertTime(Context mContext,String time_appointments,String lat_long,String time_notice,GPSTracker gpsTracker) throws ParseException {
 
         this.mContext = mContext;
-        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
-        Log.d("URL", url);
+        this.lat_lng=lat_long;
+//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+//        Log.d("URL", url);
         this.time_notice = time_notice;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time_appointments2 = dateFormat.parse(time_appointments);
         this.time_appointments=time_appointments2;
         this.gps = gpsTracker;
-        gps.getLatitude();
-        gps.getLongitude();
-        Log.i("Latitude,","Longitude"+gps.getLatitude()+gps.getLongitude());
-
-//        String currentDate1 = getDateTime();
-//        Date currentDate = dateFormat.parse(currentDate1);
-//        this.currentDate=currentDate;
-        GeoTask geoTask = new GeoTask(CalAlertTime.this,time_appointments,time_notice);
-        geoTask.delegate = this;
-        geoTask.execute(url);
-
-
-//        Calendar nnnn = Calendar.getInstance();
-//                    nnnn.getTime();
-//                    final int _id = (int) System.currentTimeMillis();
 //
-//                    Intent intent = new Intent(context, AlarmReceiver.class);
-//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, _id, intent, 0);
-//                    AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-//                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
+//        Double Lat = gps.getLatitude();
+//        Double Lng = gps.getLongitude();
+//        Log.i("Latitude,","Longitude"+gps.getLatitude()+gps.getLongitude());
+//        if(Lat==0.0) {
+//            Log.e("current_lat_lng","Have not current lat and long");
+//            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+//            Log.d("URL_Current", url);
+//            GeoTask geoTask = new GeoTask(CalAlertTime.this);
+//            geoTask.delegate = this;
+//            geoTask.execute(url);
+//        }else {
+//            String Lat2 = String.valueOf(Lat);
+//            String Lng2 = String.valueOf(Lng);
+//            String current_lat_lng = Lat2+","+Lng2;
+//            Log.e("current_lat_lng And location lat_lng",current_lat_lng+" And "+lat_lng);
+//            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current_lat_lng + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+//            Log.d("URL", url);
+//            GeoTask geoTask = new GeoTask(CalAlertTime.this);
+//            geoTask.delegate = this;
+//            geoTask.execute(url);
+//        }
 
-//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + lat_long + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
-//        Log.d("url", url);
-//        new GeoTask(CalAlertTime.this).execute(url);
 
-//        GeoTask geoTask = new GeoTask(CalAlertTime.this,time_appointments,time_notice);
-//        geoTask.execute(url);
-//        JSONObject result = geoTask.getMinTime();
-        Log.d("time_appointments", time_appointments);
-        Log.d("time_notice", time_notice);
+        Log.d("This is class","CalAlertTime");
 //        Log.d("min time", String.valueOf(result));
 
         // long diff = 60*60 * 1000; // milliseconds!
@@ -182,8 +179,8 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     }
 
     public void processFinish(String output){
-        time_travel=output;
-//        Log.d("MIN = ", "" + Output);
+        this.time_travel=output;
+        Log.d("this.time_travel", "" + time_travel);
 
         //Toast.makeText(CalAlertTime.this,"MIN = "+output,Toast.LENGTH_LONG);
     }
@@ -193,10 +190,45 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
 
     public void run() {
 
+
+
+//        gps.getLatitude();
+//        gps.getLongitude();
+//        Log.i("Latitude,","Longitude"+gps.getLatitude()+gps.getLongitude());
+//
+//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+//        Log.d("URL", url);
+//
+//
+//        GeoTask geoTask = new GeoTask(CalAlertTime.this);
+//        geoTask.delegate = this;
+//        geoTask.execute(url);
        while (true) {
             try {
 
                 Thread.sleep(10000);
+                Double Lat = gps.getLatitude();
+                Double Lng = gps.getLongitude();
+                Log.i("Latitude,", "Longitude" + gps.getLatitude() + gps.getLongitude());
+                if(Lat==0.0) {
+                    Log.e("current_lat_lng","Have not current lat and long");
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+                    Log.d("URL_Current", url);
+                    GeoTask geoTask = new GeoTask(CalAlertTime.this);
+                    geoTask.delegate = this;
+                    geoTask.execute(url);
+                }else {
+                    String Lat2 = String.valueOf(Lat);
+                    String Lng2 = String.valueOf(Lng);
+                    String current_lat_lng = Lat2+","+Lng2;
+                    Log.e("current_lat_lng And location lat_lng",current_lat_lng+" And "+lat_lng);
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current_lat_lng + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+                    Log.d("URL", url);
+                    GeoTask geoTask = new GeoTask(CalAlertTime.this);
+                    geoTask.delegate = this;
+                    geoTask.execute(url);
+                }
+
                 Date time_cal = calAlert(time_appointments, time_notice, time_travel);
                 String currentDate1 = getDateTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -282,6 +314,7 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     public Date calAlert(Date time_appointments_, String time_notice_, String time_travel_) {
         int time_notice1 = Integer.parseInt(time_notice_);
         int time_notice2 = time_notice1 * 60 * 1000;
+        Log.i("Time_travel.......................",time_travel_);
         double time_travel1 = Double.parseDouble(time_travel_);
         double time_travel2 = time_travel1 * 60 * 1000;
         Log.i("WoW_time_travel2", String.valueOf(time_travel1));
@@ -333,36 +366,36 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
 //
         return time_cal;
     }
-    public Alarm getAlarm(){
-
-
-
-        Calendar nnnn = Calendar.getInstance();
-        nnnn.getTime();
-        Log.i("Calendar nnnn", String.valueOf(nnnn));
-        setAlarm(nnnn);
-        return null;
-    }
-    public void setAlarm(Calendar targetCal) {
-        Log.i("targetCal.getTime() = ", targetCal.getTime().toString());
-//        listValue.add(targetCal.getTime() + "");
-
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,listValue);
-//        listAlarm.setAdapter(adapter);
-//        Log.i("listValue", String.valueOf(listValue));
-        final int _id = (int) System.currentTimeMillis();
-
-        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValue);
-//        listAlarm.setAdapter(adapter);
-    }
+//    public Alarm getAlarm(){
+//
+//
+//
+//        Calendar nnnn = Calendar.getInstance();
+//        nnnn.getTime();
+//        Log.i("Calendar nnnn", String.valueOf(nnnn));
+//        setAlarm(nnnn);
+//        return null;
+//    }
+//    public void setAlarm(Calendar targetCal) {
+//        Log.i("targetCal.getTime() = ", targetCal.getTime().toString());
+////        listValue.add(targetCal.getTime() + "");
+//
+////        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,listValue);
+////        listAlarm.setAdapter(adapter);
+////        Log.i("listValue", String.valueOf(listValue));
+//        final int _id = (int) System.currentTimeMillis();
+//
+//        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
+//        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+//
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+////        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValue);
+////        listAlarm.setAdapter(adapter);
+//    }
     }
