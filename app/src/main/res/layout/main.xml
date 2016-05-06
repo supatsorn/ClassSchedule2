@@ -110,13 +110,13 @@
             android:layout_gravity="top|left|bottom|right"
             android:layout_margin="0.1dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cal"
-            android:id="@+id/cal"
-            android:layout_row="7"
-            android:layout_column="0" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="cal"-->
+            <!--android:id="@+id/cal"-->
+            <!--android:layout_row="7"-->
+            <!--android:layout_column="0" />-->
 
     </GridLayout>
     </LinearLayout>

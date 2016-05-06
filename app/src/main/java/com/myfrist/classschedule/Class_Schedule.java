@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +55,10 @@ public class Class_Schedule {
         }else
             return true;
     }
-
+    public void deleteDClass(Integer id) {
+        SQLiteDatabase db = objMySQLiteOpenHelper.getWritableDatabase();
+        db.delete(CLASS_TABLE, "class_id="+id, null);
+    }
 
 
 //    public ArrayList<String> getAllSemList() {

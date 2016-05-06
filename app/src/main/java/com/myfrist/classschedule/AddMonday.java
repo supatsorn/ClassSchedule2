@@ -1,9 +1,11 @@
 package com.myfrist.classschedule;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -78,6 +80,7 @@ public class AddMonday extends AppCompatActivity {
         }
 
         sbj_name = (EditText)findViewById(R.id.sbj_name);
+        Log.i("Subject Name", String.valueOf(sbj_name));
         sbj_num = (EditText)findViewById(R.id.sbj_num);
         detail = (EditText)findViewById(R.id.detail);
         save = (Button)findViewById(R.id.save);
@@ -96,8 +99,9 @@ public class AddMonday extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddMonday.this, MainActivity.class);
-                startActivity(intent);
+                finish();
+//                Intent intent = new Intent(AddMonday.this, Monday.class);
+//                startActivity(intent);
             }
         });
 
@@ -254,31 +258,59 @@ public class AddMonday extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v) {
+                        String Sbj_name = sbj_name.getText().toString();
+                        String Sbj_num = sbj_num.getText().toString();
+                        String Detail = detail.getText().toString();
+                        if (Sbj_name.matches("")||Sbj_num.matches("")) {
+                            openDialog();
+                        } else {
+                            boolean isInserted = objClass_Schedul.addNewClass_Schedule(sbj_name.getText().toString(),
+                                    sbj_num.getText().toString(), Mon.toString(), settime.toString(), local_l
+                                    , strNoticeChooed.toString(), detail.getText().toString());
+                            if (isInserted = true) {
+                                try {
+                                    compareDates();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                Toast.makeText(AddMonday.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
+                            } else
+                                Toast.makeText(AddMonday.this, "DATA not Inserted ", Toast.LENGTH_LONG).show();
 
-                        boolean isInserted = objClass_Schedul.addNewClass_Schedule(sbj_name.getText().toString(),
-                                sbj_num.getText().toString(),Mon.toString(),settime.toString(),local_l
-                                ,strNoticeChooed.toString(),detail.getText().toString());
-                        if (isInserted = true) {
-                            try {
-                                compareDates();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(AddMonday.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(AddMonday.this, "Click", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(AddMonday.this, Monday.class);
+                            intent.putExtra("name", "this is Main2");
+                            startActivity(intent);
+
                         }
-
-                        else
-                            Toast.makeText(AddMonday.this, "DATA not Inserted ", Toast.LENGTH_LONG).show();
-
-
-                        Toast.makeText(AddMonday.this, "Click", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(AddMonday.this, Monday.class);
-                        intent.putExtra("name", "this is Main2");
-                        startActivity(intent);
-
                     }
                 }
         );
+    }
+    //Alert dialog setting
+    public void openDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Warning!,Please complete data ");
+
+        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent intent = new Intent(AddMonday.this, AddMonday.class);
+                startActivity(intent);
+                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
     private void compareDates() throws ParseException {
         current_time = getDateTime();
@@ -294,16 +326,17 @@ public class AddMonday extends AppCompatActivity {
         Log.i("cent_time start", String.valueOf(dateCompareOne));
         Log.i("current_time end", String.valueOf(dateCompareTwo));
         if ( dateCompareOne.before( date ) && dateCompareTwo.after(date)) {
-
-            for (int i = 0; i < mCount_i; i++) {
-                String time_appointments = date2 + " " + settime;
-                String lat_long = loca_mon.get(i);
-                String time_notice = strNoticeChooed;
-                Log.i("time_notice ", time_notice);
-                Thread x = new Thread(new CalAlertTime(getApplicationContext(), time_appointments, lat_long, time_notice, gpsTracker));
-                x.start();
+            if((today.equals("Mon"))||(today.equals("จ."))) {
+                for (int i = 0; i < mCount_i; i++) {
+                    String time_appointments = date2 + " " + settime;
+                    String lat_long = lat_lng;
+                    String time_notice = strNoticeChooed;
+                    Log.i("time_notice ", time_notice);
+                    Thread x = new Thread(new CalAlertTime(getApplicationContext(), time_appointments, lat_long, time_notice, gpsTracker));
+                    x.start();
+                }
             }
-            Log.i("Pancake ", "Wednesday");
+            Log.i("Today ", "Today is not Monday");
         }
     }
     SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.US);

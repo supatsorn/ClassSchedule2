@@ -59,7 +59,7 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     Date time_cal;
     MainActivity objmain;
     Button cal;
-    String current = "18.803632,98.9523349";
+    String current = "18.8032379,98.9504395";
     String current2="18.8011958,98.9532585";
     String Distance;
     public Alarm objAlarm;
@@ -119,7 +119,9 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     public CalAlertTime(Context mContext,String time_appointments,String lat_long,String time_notice,GPSTracker gpsTracker) throws ParseException {
 
         this.mContext = mContext;
+        Log.i("Lattttt_Longggggg",lat_long);
         this.lat_lng=lat_long;
+
 //        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
 //        Log.d("URL", url);
         this.time_notice = time_notice;
@@ -127,6 +129,7 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
         Date time_appointments2 = dateFormat.parse(time_appointments);
         this.time_appointments=time_appointments2;
         this.gps = gpsTracker;
+
 //
 //        Double Lat = gps.getLatitude();
 //        Double Lng = gps.getLongitude();
@@ -180,7 +183,9 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
 
     public void processFinish(String output){
         this.time_travel=output;
-        Log.d("this.time_travel", "" + time_travel);
+//        Log.i("Output",output);
+//        Log.i("Output",Output);
+//        Log.d("this.time_travel", "" + time_travel);
 
         //Toast.makeText(CalAlertTime.this,"MIN = "+output,Toast.LENGTH_LONG);
     }
@@ -206,13 +211,14 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
        while (true) {
             try {
 
-                Thread.sleep(10000);
+                Thread.sleep(10000);//1000*60*5=300000
                 Double Lat = gps.getLatitude();
                 Double Lng = gps.getLongitude();
+                Log.d("Time appointments+Lat,Lng", this.time_appointments + this.lat_lng);
                 Log.i("Latitude,", "Longitude" + gps.getLatitude() + gps.getLongitude());
                 if(Lat==0.0) {
-                    Log.e("current_lat_lng","Have not current lat and long");
-                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + current2 + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+                    Log.e("current_lat_lng", "Have not current lat and long");
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
                     Log.d("URL_Current", url);
                     GeoTask geoTask = new GeoTask(CalAlertTime.this);
                     geoTask.delegate = this;
@@ -228,7 +234,8 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
                     geoTask.delegate = this;
                     geoTask.execute(url);
                 }
-
+//                this.time_travel=Output;
+//                Log.i("time_travel",time_travel);
                 Date time_cal = calAlert(time_appointments, time_notice, time_travel);
                 String currentDate1 = getDateTime();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

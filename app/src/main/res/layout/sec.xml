@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="#fae2de"
     android:padding="10dp">
 
     <TextView
@@ -14,28 +14,32 @@
         android:gravity="center"
         android:textSize="30dp"
         android:layout_margin="10dp"
-        android:textColor="#000000"
-        android:text="Take medicine"
+        android:textColor="#e2205a"
+        android:text="It's almost time to study"
         />
-    
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="20dp"
+        android:textSize="30dp"
         android:layout_margin="10dp"
-        android:textColor="#000000"
-        android:text="Remide you to take medicine"
+        android:textColor="#e2205a"
+        android:text="ไกล้ถึงเวลาเรียนแล้ว"
         />
 
     <Button
+
         android:id="@+id/btnStop"
+        android:background="#f595b4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="#000000"
-        android:text="Stop Sound" />
+        android:layout_margin="25dp"
+        android:textColor="#860e62"
+        android:text="Stop Sound"
+        android:textSize="30dp"/>
+
 
 </LinearLayout>

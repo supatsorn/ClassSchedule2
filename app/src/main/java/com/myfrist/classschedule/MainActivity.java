@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public String lat,lng,lat_lng;
     public Thread x;
     public GPSTracker gpsTracker;
-
+    boolean status_network;
 
 
     @Override
@@ -160,16 +162,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button cal = (Button) findViewById(R.id.cal);
-        cal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Click", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, VarnaLabGeoLocations.class);
-                intent.putExtra("name", "this is Main2");
-                startActivity(intent);
-            }
-        });
+//        Button cal = (Button) findViewById(R.id.cal);
+//        cal.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(MainActivity.this, "Click", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(MainActivity.this, VarnaLabGeoLocations.class);
+//                intent.putExtra("name", "this is Main2");
+//                startActivity(intent);
+//            }
+//        });
 
 
 
@@ -208,21 +210,46 @@ public class MainActivity extends AppCompatActivity {
         noti_sat = getAllNotiSatList();
         noti_sun = getAllNotiSunList();
 
-        //get start_date end_date
-        if (start_date==null){
-            openDialog();
-            Log.i("Not found ","Start date"+" End date");
-        }else
+//        status_network = isNetworkOnline();
+     //   if(status_network==true) {
 
-        try {
-             compareDates();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
+            //get start_date end_date
+            if (start_date == null) {
+                openDialog();
+                Log.i("Not found ", "Start date" + " End date");
+            } else
+
+                try {
+                    compareDates();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+//        }else if(status_network==false){
+//            openDialogConnectNetwork();
+//        }
     }
 
-
+    //check network connection
+//    public boolean isNetworkOnline() {
+//        boolean status=false;
+//        try{
+//            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//            NetworkInfo netInfo = cm.getNetworkInfo(0);
+//            if (netInfo != null && netInfo.getState()==NetworkInfo.State.CONNECTED) {
+//                status= true;
+//            }else {
+//                netInfo = cm.getNetworkInfo(1);
+//                if(netInfo!=null && netInfo.getState()== NetworkInfo.State.CONNECTED)
+//                    status= true;
+//            }
+//        }catch(Exception e){
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return status;
+//
+//    }
 
     SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.US);
 
@@ -378,23 +405,9 @@ public class MainActivity extends AppCompatActivity {
                 }else
                     Log.i("Pancake ", "Not day");
 
-
-                //Log.i("mooho na ", "finish2");
-//            switch (today){
-//                case "Mon":
-//                    ;
-//                    ;
-//                    break;
-//                case "Tue":
-//                    ;
-//                    ;
-//                    break;
-//                case ""
-//
-//            }
-
-
         }else
+            Toast.makeText(MainActivity.this,"Not during term", Toast.LENGTH_LONG).show();
+//            openDialogNotSemester();
             Log.i("yes","not finish");
     }
 
@@ -407,7 +420,31 @@ public class MainActivity extends AppCompatActivity {
             return new Date(0);
         }
     }
+    //Alert please connect network
+    public void openDialogConnectNetwork(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Warning!,You must connecting network and GPS");
 
+//        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface arg0, int arg1) {
+//                Intent intent = new Intent(MainActivity.this, Setting.class);
+//                intent.putExtra("name", "this is Main2");
+//                startActivity(intent);
+//                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+//            }
+//        });
+
+        alertDialogBuilder.setNegativeButton("Yes",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
    //Alert dialog setting
    public void openDialog(){
        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -433,7 +470,30 @@ public class MainActivity extends AppCompatActivity {
        AlertDialog alertDialog = alertDialogBuilder.create();
        alertDialog.show();
    }
+    //Alert dialog setting
+    public void openDialogNotSemester(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Not during term");
 
+        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+//                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//                startActivity(intent);
+                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
     //ปุ่มตั้งค่าด้านบน
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -708,8 +768,8 @@ public class MainActivity extends AppCompatActivity {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
 
-             String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+             String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
              Log.i("strLatLng ", strLatLng);
@@ -727,8 +787,8 @@ public class MainActivity extends AppCompatActivity {
 
         while (!cursor.isAfterLast()) {
 
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);
@@ -747,8 +807,8 @@ public class MainActivity extends AppCompatActivity {
 
         while (!cursor.isAfterLast()) {
 
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);
@@ -768,8 +828,8 @@ public class MainActivity extends AppCompatActivity {
 
         while (!cursor.isAfterLast()) {
 
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);
@@ -789,8 +849,8 @@ public class MainActivity extends AppCompatActivity {
 
         while (!cursor.isAfterLast()) {
 
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);
@@ -809,8 +869,8 @@ public class MainActivity extends AppCompatActivity {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);
@@ -830,8 +890,8 @@ public class MainActivity extends AppCompatActivity {
 
         while (!cursor.isAfterLast()) {
 
-            String  strM1 = cursor.getString(12);
-            String  strM2 = cursor.getString(11);
+            String  strM1 = cursor.getString(11);
+            String  strM2 = cursor.getString(12);
             String strLatLng = strM1+","+strM2;
 
             Log.i("strLatLng ", strLatLng);

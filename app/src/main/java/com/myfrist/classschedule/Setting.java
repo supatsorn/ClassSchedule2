@@ -1,11 +1,13 @@
 package com.myfrist.classschedule;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -90,8 +92,9 @@ public class Setting extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Setting.this, MainActivity.class);
-                startActivity(intent);
+                finish();
+//                Intent intent = new Intent(Setting.this, MainActivity.class);
+//                startActivity(intent);
             }
         });
 
@@ -286,19 +289,24 @@ public class Setting extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v) {
-                        date_time1 = date_str+" "+"00:00:00";
-                        date_time2 = date_en+" "+"00:00:00";
-                        Log.i("mint",date_time1+"AND"+date_time2);
-                        boolean isInserted = objSemester.addNewSemester(semester_num.getText().toString(),
-                                year.getText().toString(), date_time1.toString(),date_time2.toString());
-                        if (isInserted = true) {
-                            Intent intent = new Intent(Setting.this, MainActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(Setting.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
-                        }
-                        else
-                            Toast.makeText(Setting.this, "DATA not Inserted ", Toast.LENGTH_LONG).show();
+                        String Sbj_name = semester_num.getText().toString();
+                        String Sbj_num = year.getText().toString();
+                        if (Sbj_name.matches("") || Sbj_num.matches("")) {
+                            openDialog();
+                        } else {
+                            date_time1 = date_str + " " + "00:00:00";
+                            date_time2 = date_en + " " + "00:00:00";
+                            Log.i("mint", date_time1 + "AND" + date_time2);
+                            boolean isInserted = objSemester.addNewSemester(semester_num.getText().toString(),
+                                    year.getText().toString(), date_time1.toString(), date_time2.toString());
+                            if (isInserted = true) {
+                                Intent intent = new Intent(Setting.this, MainActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(Setting.this, "DATA Inserted ", Toast.LENGTH_LONG).show();
+                            } else
+                                Toast.makeText(Setting.this, "DATA not Inserted ", Toast.LENGTH_LONG).show();
 
+                        }
                     }
                 }
         );
@@ -317,6 +325,30 @@ public class Setting extends AppCompatActivity {
         public void onNothingSelected(AdapterView<?> parent) {
             // Another interface callback
         }
+    }
+        //Alert dialog setting
+    public void openDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Warning!,Please complete data ");
+
+        alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent intent = new Intent(Setting.this, Setting.class);
+                startActivity(intent);
+                // Toast.makeText(MainActivity.this,"You clicked yes button",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
     private void connectedSQLite() {
         //connectSQLite

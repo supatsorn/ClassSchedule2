@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public SQLiteDatabase database;
 
     private com.myfrist.classschedule.MySQLiteOpenHelper dbHelper;
-    private static final String databaseName = "mint29.sqlite";
+    private static final String databaseName = "db3.sqlite";
     private  static  final  int databaseVertion = 1;
     Context myContext;
 
@@ -46,11 +47,10 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(TableSemester);
         db.execSQL(TableClassSchedule);                                      //yyyy-MM-dd HH:mm:ss
        // db.execSQL(TableLocation);
-
         db.execSQL("CREATE TABLE "+ Location_TABLE
                 +" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + LOCATION_NAME + " TEXT, " + LNG + " TEXT, " + LAT + " TEXT );");
-        db.execSQL("INSERT INTO Location (location_name, lng, lat )VALUES ('SCB1','18.8015272','98.9511638');");
+                + LOCATION_NAME + " TEXT, " + LAT + " TEXT, " + LNG + " TEXT );");
+        db.execSQL("INSERT INTO Location (location_name, lat,lng )VALUES ('SCB1','18.8015272','98.9511638');");
         db.execSQL("INSERT INTO Location (location_name,lat,lng) VALUES ('SCB2','18.8016565','98.9547273');");
         db.execSQL("INSERT INTO Location (location_name,lat,lng) VALUES ('SCB3','18.8032285','98.952047');") ;
         db.execSQL( "INSERT INTO Location (location_name,lat,lng) VALUES ('SCB4','18.803145','98.953478');");
@@ -58,10 +58,12 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('STB','18.8034241','98.9521138');");
         db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('PB','18.8011958','98.9532585');");
         db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('IMB','18.8029354','98.9547791');");
-        db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('CB','18.8020137','98.9517463');");
-        db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('BB','18.8025151','98.9508895');");
+        db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('CB','18.8036518','98.9524582');");
+        db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('BB','18.802009','98.9539352');");
         db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('GB','18.8032379','98.9504395');");
         db.execSQL ("INSERT INTO Location (location_name,lat,lng) VALUES ('CSB','18.8032379','98.9504395');");
+
+
         //String insertData2 = "INSERT INTO mint (todo_text) VALUES ('Todo Text 2');";
 //        String insertData3 = "INSERT INTO mint (todo_text) VALUES ('Todo Text 3');";
 //        String insertData4 = "INSERT INTO mint (todo_text) VALUES ('Hi mint 4');";
@@ -81,7 +83,6 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 //        db.execSQL(insertCSB);
 
     }
-
 
 //    public ArrayList<String> getAllMintList(){
 //        ArrayList<String> mintList = new ArrayList<String>();
