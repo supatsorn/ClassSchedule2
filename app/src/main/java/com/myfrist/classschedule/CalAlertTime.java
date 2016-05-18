@@ -77,6 +77,8 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
     private PendingIntent alarmIntent;
     private GPSTracker gps;
     final static int RQS_1 = 1;
+    String beforeLat_Lng="";
+
 
     Context mContext;
 //    @Override
@@ -211,25 +213,39 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
        while (true) {
             try {
 
-                Thread.sleep(10000);//1000*60*5=300000
+                Thread.sleep(300000);//1000*60*5=300000
                 Double Lat = gps.getLatitude();
                 Double Lng = gps.getLongitude();
                 Log.d("Time appointments+Lat,Lng", this.time_appointments + this.lat_lng);
                 Log.i("Latitude,", "Longitude" + gps.getLatitude() + gps.getLongitude());
                 if(Lat==0.0) {
-                    Log.e("current_lat_lng", "Have not current lat and long");
-                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
-                    Log.d("URL_Current", url);
-                    GeoTask geoTask = new GeoTask(CalAlertTime.this);
-                    geoTask.delegate = this;
-                    geoTask.execute(url);
+                    if(beforeLat_Lng.matches("")) {
+                        Log.e("current_lat_lng", "Have not current lat and long");
+                        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyDhtmYLLvihMKzx5Zb0oZ6XDFs3rdDUV0Y";
+                        Log.d("URL_Current", url);
+                        Log.i("Current Lat Lng 0.0", beforeLat_Lng);
+                        GeoTask geoTask = new GeoTask(CalAlertTime.this);
+                        geoTask.delegate = this;
+                        geoTask.execute(url);
+                    }else {
+                        Log.e("current_lat_lng", "Have not current lat and long");
+                        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + beforeLat_Lng + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyDhtmYLLvihMKzx5Zb0oZ6XDFs3rdDUV0Y";
+                        Log.d("URL_Current", url);
+                        Log.i("Current Lat Lng beforeLat_Lng", beforeLat_Lng);
+                        GeoTask geoTask = new GeoTask(CalAlertTime.this);
+                        geoTask.delegate = this;
+                        geoTask.execute(url);
+                    }
                 }else {
+
                     String Lat2 = String.valueOf(Lat);
                     String Lng2 = String.valueOf(Lng);
                     String current_lat_lng = Lat2+","+Lng2;
+                    this.beforeLat_Lng = current_lat_lng;
                     Log.e("current_lat_lng And location lat_lng",current_lat_lng+" And "+lat_lng);
-                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current_lat_lng + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAtjcnHYDIXpoxUKBHa62x0KVgVGvkdrV8";
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=" + current_lat_lng + "&destinations=" + lat_lng + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyDhtmYLLvihMKzx5Zb0oZ6XDFs3rdDUV0Y";
                     Log.d("URL", url);
+                    Log.i("Current Lat Lng current", beforeLat_Lng);
                     GeoTask geoTask = new GeoTask(CalAlertTime.this);
                     geoTask.delegate = this;
                     geoTask.execute(url);
@@ -241,55 +257,31 @@ public class CalAlertTime extends Activity implements Runnable, GeoTask.AsyncRes
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date currentDate = dateFormat.parse(currentDate1);
                 this.currentDate=currentDate;
-                Log.i("WoW_time_cal","Caltime = "+ String.valueOf(time_cal)+" current = "+String.valueOf(currentDate));
-                if (time_cal.getTime() <= currentDate.getTime()) {
+                Log.i("WoW_time_cal", "Caltime = " + String.valueOf(time_cal) + " current = " + String.valueOf(currentDate));
+                if(time_appointments.getTime()>=currentDate.getTime()) {
+                    if (time_cal.getTime() <= currentDate.getTime()) {
+
 
 //                    Calendar nnnn = Calendar.getInstance();
 //
 //                    nnnn.getTime();
-                    Calendar nnnn = Calendar.getInstance();
-                    nnnn.getTime();
-                    final int _id = (int) System.currentTimeMillis();
+                        Calendar nnnn = Calendar.getInstance();
+                        nnnn.getTime();
+                        final int _id = (int) System.currentTimeMillis();
 
-                    Intent intent = new Intent(mContext, AlarmReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, _id, intent, 0);
-                    AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
-
-//                    setAlarm(nnnn);
-//                    Intent i = new Intent();
-//                    i.setClass(this, AlarmReceiver.class);
-//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(i);
-//                    Intent intent = new Intent(this, AlarmReceiver.class);
-//                    startActivity(intent);
-//                    mintMinny();
-//                    Intent intent = new Intent(this, ShowEvent.class);
-//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this,  0, intent, 0);
-//                    mAlarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//
-//                    // Cancel any existing service(s)
-//                    mAlarmManager.cancel(pendingIntent);
-//                    Intent alarmIntent = new Intent(CalAlertTime.this, AlarmReceiver.class);
-//                    pendingIntent = PendingIntent.getBroadcast(CalAlertTime.this, 0, alarmIntent, 0);
-//                    startActivity(new Intent(CalAlertTime.this, Alarm.class));
-                 //getAlarm();
-//                    Calendar nnnn = Calendar.getInstance();
-//                    nnnn.getTime();
-//                    final int _id = (int) System.currentTimeMillis();
-//
-//                    Intent intent = new Intent(getBaseContext(), ShowEvent.class);
-//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), _id, intent, 0);
-//                    AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//                    alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
+                        Intent intent = new Intent(mContext, AlarmReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, _id, intent, 0);
+                        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, nnnn.getTimeInMillis(), pendingIntent);
 
 
+                        System.out.println("countdown:Now,I'm very happy ");
+                        break;
 
-                System.out.println("countdown:Now,I'm very happy ");
-                break;
-
-                }else {
-                    System.out.println("countdown:Nottttttttttttttttttttttttttttt,I'm very happy ");
+                    } else {
+                        System.out.println("countdown:Nottttttttttttttttttttttttttttt,I'm very happy ");
+                    }
+                    System.out.println("Time passed");
                 }
 ////                //  if (time_cal.getTime() <= time_alerts.getTime()) {
 ////                System.out.println("countdown:Now,I'm very happy " + time_alerts);

@@ -72,7 +72,7 @@
             android:name=".AddMonday"
             android:label="@string/title_activity_add_monday"
             android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+    </activity>
         <activity
             android:name=".Tuesday"
             android:label="@string/title_activity_tuesday"

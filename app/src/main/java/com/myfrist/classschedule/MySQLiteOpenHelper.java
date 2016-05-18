@@ -18,7 +18,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public SQLiteDatabase database;
 
     private com.myfrist.classschedule.MySQLiteOpenHelper dbHelper;
-    private static final String databaseName = "db3.sqlite";
+    private static final String databaseName = "db5.sqlite";
     private  static  final  int databaseVertion = 1;
     Context myContext;
 

@@ -112,52 +112,52 @@ public class Tuesday extends AppCompatActivity {
             String local = cursor.getString(5);
             Log.i("Local is ", local);
             if(local.equals("1")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB1"+cursor.getString(5)+"  Note! : "+ cursor.getString(7) ;
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB1"+"  Note! : "+ cursor.getString(7) ;
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("2")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB2"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB2"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("3")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB3"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB3"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("4")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB4"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : SCB4"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("5")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : MB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : MB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("6")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : STB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : STB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("7")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : PB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : PB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("8")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : IMB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : IMB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("9")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("10")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : BB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : BB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }else if(local.equals("11")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : GB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : GB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }
             else if(local.equals("12")){
-                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CSB"+cursor.getString(5)+"  Note! : "+ cursor.getString(7);
+                String str = "วิชา : "+cursor.getString(1) + "   เวลา :   " + cursor.getString(4)+"  สถานที่ : CSB"+"  Note! : "+ cursor.getString(7);
                 todoList.add(str);
                 cursor.moveToNext();
             }
